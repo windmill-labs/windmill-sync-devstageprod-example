@@ -30,17 +30,17 @@ jobs:
       # (push will pull first to detect conflicts and only push actual changes)
       - name: Push changes
         run: |
-        cd dev
-        deno run --unstable -A  ${{ env.CLI_URL }} workspace add dev ${{ env.DEV_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
-        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
+          cd dev
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add dev ${{ env.DEV_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
 
-        cd ../staging
-        deno run --unstable -A  ${{ env.CLI_URL }} workspace add staging ${{ env.STAGING_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
-        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
+          cd ../staging
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add staging ${{ env.STAGING_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
 
-        cd ../prod
-        deno run --unstable -A  ${{ env.CLI_URL }} workspace add prod ${{ env.PROD_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
-        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
+          cd ../prod
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add prod ${{ env.PROD_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
 
       # autocommit the new .wmill state after the push
       - uses: stefanzweifel/git-auto-commit-action@v4
