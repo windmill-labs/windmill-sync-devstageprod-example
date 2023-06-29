@@ -16,6 +16,30 @@ There are 3 folders:
 
 Each folder corresponds to a windmill workspace.
 
+Locally, you will want to add those 3 workspaces:
+
+```
+wmill workspace add
+```
+
+1. Pass the name you are gonna use for the workspace (dev/staging/prod) on your
+   local machine to switch back and forth
+2. Pass name of the workspace-id on the remote (findable in the workspace list)
+3. Pass the url of the remote (https://app.windmill.dev/ for cloud hosted
+   instances)
+4. Pass a token
+
+Then locally, use:
+
+```
+wmill workspace switch <NAME>
+```
+
+to switch between workspaces.
+
+The current workspace is stored globally and is not tied to the folder you are
+currently in.
+
 Users of this repo can commit changes to the main branches and have it deployed
 on the windmill workspace corresponding to their dev/staging/prod
 folder/workspace thanks to a github action that will simply uses the
