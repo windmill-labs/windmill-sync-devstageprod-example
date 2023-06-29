@@ -1,12 +1,15 @@
-name: 'Pull windmill to main'
+name: "Pull windmill to main"
 on:
   workflow_dispatch:
   schedule:
-   - cron:  '0 * * * *'
+    - cron: "0 * * * *"
 
 env:
-  WMILL_URL: https://app.windmill.dev/
-  WMILL_WORKSPACE: github-sync-example
+  WM_HOST: https://app.windmill.dev/
+  DEV_WORKSPACE: dev-sync-example
+  STAGING_WORKSPACE: staging-sync-example
+  PROD_WORKSPACE: prod-sync-example
+  CLI_URL: https://deno.land/x/wmill@v1.123.1/main.ts
 
 jobs:
   sync:
@@ -23,12 +26,21 @@ jobs:
       # Pull changes
       - name: Pull changes
         run: |
-          deno run --unstable -A  https://deno.land/x/wmill@v1.104.0/main.ts workspace add __automation ${{ env.WMILL_WORKSPACE }} ${{ env.WMILL_URL }} --token ${{ secrets.WMILL_TOKEN }}
-          deno run --unstable -A  https://deno.land/x/wmill@v1.104.0/main.ts sync pull --yes
+          cd dev
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add dev ${{ env.DEV_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync pull --yes
+
+          cd ../staging
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add staging ${{ env.STAGING_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync pull --yes
+
+          cd ../prod
+          deno run --unstable -A  ${{ env.CLI_URL }} workspace add prod ${{ env.PROD_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+          deno run --unstable -A  ${{ env.CLI_URL }} sync pull --yes
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          title: 'Sync windmill -> repo'
+          title: "Sync windmill -> repo"
       # instead of creating pull request, git-auto-commit can push directly to main
       # - uses: stefanzweifel/git-auto-commit-action@v4

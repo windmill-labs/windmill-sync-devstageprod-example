@@ -1,15 +1,18 @@
-name: 'Push main to windmill workspace'
+name: "Push main to windmill workspace"
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - "main"
   # schedule:
   #  - cron:  '0 * * * *'
 
 env:
-  WMILL_URL: https://app.windmill.dev/
-  WMILL_WORKSPACE: github-sync-example
+  WM_HOST: https://app.windmill.dev/
+  DEV_WORKSPACE: dev-sync-example
+  STAGING_WORKSPACE: staging-sync-example
+  PROD_WORKSPACE: prod-sync-example
+  CLI_URL: https://deno.land/x/wmill@v1.123.1/main.ts
 
 jobs:
   sync:
@@ -27,8 +30,17 @@ jobs:
       # (push will pull first to detect conflicts and only push actual changes)
       - name: Push changes
         run: |
-          deno run --unstable -A  https://deno.land/x/wmill@v1.104.0/main.ts workspace add __automation ${{ env.WMILL_WORKSPACE }} ${{ env.WMILL_URL }} --token ${{ secrets.WMILL_TOKEN }}
-          deno run --unstable -A  https://deno.land/x/wmill@v1.104.0/main.ts sync push --yes --fail-conflicts
+        cd dev
+        deno run --unstable -A  ${{ env.CLI_URL }} workspace add dev ${{ env.DEV_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
 
-      # autocommit the new .wmill state after the push                                                             
+        cd ../staging
+        deno run --unstable -A  ${{ env.CLI_URL }} workspace add staging ${{ env.STAGING_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
+
+        cd ../prod
+        deno run --unstable -A  ${{ env.CLI_URL }} workspace add prod ${{ env.PROD_WORKSPACE }} ${{ env.WM_HOST }} --token ${{ secrets.WMILL_TOKEN }}
+        deno run --unstable -A  ${{ env.CLI_URL }} sync push --yes --fail-conflicts
+
+      # autocommit the new .wmill state after the push
       - uses: stefanzweifel/git-auto-commit-action@v4
