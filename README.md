@@ -8,6 +8,14 @@ This repo extends the
 with a dev/staging/prod setup based on having the sync done on different
 folders.
 
+There are 3 folders:
+
+- dev
+- staging
+- prod
+
+Each folder corresponds to a windmill workspace.
+
 Users of this repo can commit changes to the main branches and have it deployed
 on the windmill workspace corresponding to their dev/staging/prod
 folder/workspace thanks to a github action that will simply uses the
@@ -46,9 +54,6 @@ Edit the workflows:
   to sync back any changes made in Windmill UI to this repo under the form of
   either a Pull Request or a commit to main directly.
 
-![](./img/configure.png#gh-dark-mode-only)
-![](./img/configure-light.png#gh-light-mode-only)
-
 ### Security
 
 We recommend creating and using a separate account in Windmill from which to use
@@ -62,3 +67,5 @@ goes into detail of all the options.
 
 Use the .wmillignore file to filter the contents to sync (like only the content
 of some folders), it supports the .gitignore syntax.
+
+The .wmillignore is in each folder.
