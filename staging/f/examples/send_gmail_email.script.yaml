@@ -1,0 +1,39 @@
+summary: Send an email with Gmail
+description: Fork of hub/165/_send_email_(no_attachment)
+lock: []
+is_template: false
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    gmail_auth:
+      type: object
+      description: ''
+      default: null
+      format: resource-gmail
+    message:
+      type: string
+      description: ''
+      default: null
+      format: ''
+    subject:
+      type: string
+      description: ''
+      default: null
+      format: ''
+    to_email:
+      type: string
+      description: ''
+      default: null
+      format: ''
+    userId:
+      type: string
+      description: ''
+      default: me
+      format: ''
+  required:
+    - gmail_auth
+    - to_email
+    - subject
+    - message
