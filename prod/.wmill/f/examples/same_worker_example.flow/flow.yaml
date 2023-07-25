@@ -36,3 +36,4 @@ schema:
       format: ''
   required:
     - path
+tag: null
